@@ -14,8 +14,7 @@ import (
 type AD struct {
 	hashes map[string]string
 
-	reuse      []*ReusedPassword
-	adminReuse []string
+	reuse []*ReusedPassword
 }
 
 // NewAD returns a new AD instance
@@ -113,17 +112,11 @@ func (ad *AD) LoadHashesFromNTDS(ntdsFile string, systemFile string) error {
 // Analyze runs the analysis of the collected password hashs
 func (ad *AD) Analyze() {
 	ad.findReusedPasswords()
-	ad.findAdminReuse()
 }
 
 // ReusedPasswords returns the reused passwords and according users
 func (ad *AD) ReusedPasswords() []*ReusedPassword {
 	return ad.reuse
-}
-
-// ReusedAdminAccounts returns the users which have the same password for their admin account
-func (ad *AD) ReusedAdminAccounts() []string {
-	return ad.adminReuse
 }
 
 // FindReusedPasswords searches for accounts that have the same password hash
@@ -172,28 +165,4 @@ func (ad *AD) findReusedPasswords() {
 
 	// done
 	ad.reuse = result
-}
-
-// findAdminReuse searches for similar account names in reused passwords
-func (ad *AD) findAdminReuse() {
-	// cannot run without data
-	if ad.reuse == nil {
-		return
-	}
-
-	for _, reusedpassword := range ad.reuse {
-		for _, user := range reusedpassword.Users {
-			// look for non-admin accounts
-			if !strings.HasSuffix(user, "adm") {
-				// check if corresponding adm account is also in list
-				admUser := strings.ToLower(user + "adm")
-				for _, otherUser := range reusedpassword.Users {
-					if admUser == strings.ToLower(otherUser) {
-						// store it
-						ad.adminReuse = append(ad.adminReuse, user)
-					}
-				}
-			}
-		}
-	}
 }

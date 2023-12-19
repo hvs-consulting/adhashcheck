@@ -83,32 +83,12 @@ func main() {
 			fmt.Fprintln(w, line)
 		}
 		w.Flush()
-
-		// admin accounts
-		file, err = os.Create(path.Join(outDir, "admins.csv"))
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer file.Close()
-
-		w = bufio.NewWriter(file)
-		for _, user := range ad.ReusedAdminAccounts() {
-			fmt.Fprintln(w, user)
-		}
-		w.Flush()
-
 	} else {
 		fmt.Println("Reused passwords:")
 		for _, r := range ad.ReusedPasswords() {
 			if r.Count > 1 {
 				fmt.Println(r)
 			}
-		}
-
-		fmt.Println()
-		fmt.Println("Same password for admin account:")
-		for _, r := range ad.ReusedAdminAccounts() {
-			fmt.Println(r)
 		}
 	}
 }

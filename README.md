@@ -60,11 +60,7 @@ The output directory now contains three files:
 
 * `reuse.csv`: Password hashes that are used more than once (including count and usernames)
 * `reuse-without-hash.csv`: Like `reuse.csv`, but without NTLM hashes
-* `admins.csv`: Usernames of people who have the same password for their administrative accounts
 
-# Known issues
-
-* The reuse check of administrative accounts assumes a fixed naming scheme (username -> username + "adm") - See last function in `ad.go`.
 
 # License
 
