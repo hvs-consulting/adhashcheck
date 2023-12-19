@@ -1,11 +1,8 @@
 # ADHashCheck
 
-Compare the NTLM hashes of all Active Directory accounts to find:
+Compare the NTLM hashes of all Active Directory accounts to find accounts with same password
 
-* accounts with same password
-* same password for normal and administrative accounts
-
-The tool can read the NTLM hashes from a CSV file or from the NTDS.dit and SYSTEM registry hive.
+The tool can read the NTLM hashes either from a secretsdump, from a CSV file or from the NTDS.dit and SYSTEM registry hive.
 
 # Warning
 
