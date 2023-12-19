@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -56,12 +57,11 @@ func main() {
 			}
 		}
 
-		// reused passwords
+		// reused passwords CSV
 		file, err := os.Create(path.Join(outDir, "reuse.csv"))
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer file.Close()
 
 		w := bufio.NewWriter(file)
 		for _, r := range ad.ReusedPasswords() {
@@ -69,13 +69,30 @@ func main() {
 			fmt.Fprintln(w, line)
 		}
 		w.Flush()
+		file.Close()
 
-		// reused passwords without hash
+		// reused passwords JSON
+		file, err = os.Create(path.Join(outDir, "reuse.json"))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		w = bufio.NewWriter(file)
+		for _, r := range ad.ReusedPasswords() {
+			data, err := json.Marshal(r)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Fprintln(w, string(data[:]))
+		}
+		w.Flush()
+		file.Close()
+
+		// reused passwords without hash CSV
 		file, err = os.Create(path.Join(outDir, "reuse-without-hash.csv"))
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer file.Close()
 
 		w = bufio.NewWriter(file)
 		for _, r := range ad.ReusedPasswords() {
@@ -83,6 +100,25 @@ func main() {
 			fmt.Fprintln(w, line)
 		}
 		w.Flush()
+		file.Close()
+
+		// reused passwords without hash JSON
+		file, err = os.Create(path.Join(outDir, "reuse-without-hash.json"))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		w = bufio.NewWriter(file)
+		for _, r := range ad.ReusedPasswords() {
+			r.Hash = ""
+			data, err := json.Marshal(r)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Fprintln(w, string(data[:]))
+		}
+		w.Flush()
+		file.Close()
 	} else {
 		fmt.Println("Reused passwords:")
 		for _, r := range ad.ReusedPasswords() {

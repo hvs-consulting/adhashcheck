@@ -7,9 +7,9 @@ import (
 
 // ReusedPassword is a password that is used by more than one user
 type ReusedPassword struct {
-	Hash  string
-	Count int
-	Users []string
+	Hash  string   `json:"hash,omitempty"`
+	Count int      `json:"count"`
+	Users []string `json:"users"`
 }
 
 // NewReusedPassword creates a new ReusedPassword
