@@ -57,6 +57,8 @@ The output directory now contains three files:
 
 * `reuse.csv`: Password hashes that are used more than once (including count and usernames)
 * `reuse-without-hash.csv`: Like `reuse.csv`, but without NTLM hashes
+* `reuse.json`: Like `reuse.csv`, but as JSON, which allows better post-processing
+* `reuse-without-hash.json`: Same as above, but without hashes
 
 
 # License
